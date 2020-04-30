@@ -3,7 +3,7 @@ import Axios from 'axios';
 function createAxios() {
     const axios = Axios.create();
 
-    axios.defaults.baseURL = 'http://localhost:4000/api/v1';
+    axios.defaults.baseURL = 'http://192.168.1.208:4000/api/v1/';
     /* eslint max-len: 0 */
     // axios.defaults.headers.common['x-access-token'] = localStorage.getItem('x-access-token') || '';
     axios.defaults.headers.common['Content-Type'] = 'application/json';
@@ -26,7 +26,7 @@ function createAxios() {
             // if (error && error.response && error.response.status === 401) {
             //     state.dispatch('auth/logout');
             // }
-            if(error && error.response){
+            if (error && error.response) {
                 return Promise.reject(error.response.data);
             }
             return Promise.reject(error);
@@ -39,28 +39,28 @@ function createAxios() {
 const api = createAxios();
 
 const services = {
-    async rawPost(path, body) {
-        const data = await api.post(path, body);
+    async rawPost(path, data) {
+        const results = await api.post(`http://localhost:4000/api/v1/${path}`, data);
 
-        return Promise.resolve(data);
+        return Promise.resolve(results);
     },
 
-    async updateById(path, id, body) {
-        const data = await api.put(`${path}/${id}`, body);
+    async updateById(path, id, data) {
+        const results = await api.put(`${path}/${id}`, data);
 
-        return Promise.resolve(data);
+        return Promise.resolve(results);
     },
 
     async get(path) {
-        const data = await api.get(path);
+        const results = await api.get(path);
 
-        return Promise.resolve();
+        return Promise.resolve(results);
     },
 
     async getById(path, id) {
-        const data = await api.get(`${path}/${id}`);
+        const results = await api.get(`${path}/${id}`);
 
-        return Promise.resolve(data);
+        return Promise.resolve(results);
     },
 };
 

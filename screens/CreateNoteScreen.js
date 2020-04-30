@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { View, Dimensions, StyleSheet, TextInput, KeyboardAvoidingView, SafeAreaView, AsyncStorage } from 'react-native'
+import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native'
 
 const CreateNoteScreen = (props) => {
 
     const [title, setTitle] = useState('');
-    const [note, setNote] = useState('');
+    const [content, setContent] = useState('');
 
     useEffect(() => {
         props.navigation.addListener('blur', () => {
             storeNote()
         })
-    }, [props, title, note]);
+    }, [props]);
 
     const storeNote = async () => {
         try {
-            const noteData = new NoteModel({
+            console.log({content, title})
+            const data = {
+                content,
                 title,
-                noteText: note,
-                createdDate: Date.now(),
                 image: ''
-            });
+            };
+
+            const result = await $http.rawPost('create-note', data);
+            console.log({result})
         } catch (err) {
             console.log(err)
         }
@@ -38,7 +41,7 @@ const CreateNoteScreen = (props) => {
                 style={styles.noteText}
                 placeholder="Note"
                 placeholderTextColor="#757575"
-                onChangeText={(e) => setNote(e)}
+                onChangeText={(e) => setContent(e)}
                 autoFocus={true}
                 multiline={true}
             />

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity,  } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import CustomFooter from '../components/CustomFooter';
 import  { Feather } from '@expo/vector-icons';
@@ -12,13 +12,7 @@ const HomeScreen = (props) => {
 
     const getNotes = async () => {
         try {
-            let notes = await AsyncStorage.getItem('TodoNotes');
-
-            console.log(notes)
-            if(notes && notes.length) {
-                setNotes(notes)
-            }
-
+            console.log('asdas')
         } catch (err) {
             console.log(err)
         }
