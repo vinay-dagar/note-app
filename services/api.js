@@ -26,7 +26,7 @@ function createAxios() {
             // if (error && error.response && error.response.status === 401) {
             //     state.dispatch('auth/logout');
             // }
-            if (error && error.response) {
+            if(error && error.response){
                 return Promise.reject(error.response.data);
             }
             return Promise.reject(error);
@@ -40,7 +40,7 @@ const api = createAxios();
 
 const services = {
     async rawPost(path, data) {
-        const results = await api.post(`http://localhost:4000/api/v1/${path}`, data);
+        const results = await api.post(path, data);
 
         return Promise.resolve(results);
     },

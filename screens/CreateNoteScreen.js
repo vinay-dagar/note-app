@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native'
+import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native';
+import FormFieldInput from '../components/FormFieldInput';
 
 const CreateNoteScreen = (props) => {
 
@@ -30,20 +31,18 @@ const CreateNoteScreen = (props) => {
 
     return (
         <SafeAreaView style={styles.container} enabled behavior="position" collapsable={true}>
-            <TextInput
-                style={styles.titleText}
+            <FormFieldInput 
+                inputType="text"
+                styles={styles.titleText}
                 placeholder="Title"
-                placeholderTextColor="#757575"
                 maxLength={20}
-                onChangeText={(e) => setTitle(e)}
+                handleChangeText={(e) => setTitle(e)}
             />
-            <TextInput
-                style={styles.noteText}
+            <FormFieldInput 
+                styles={styles.noteText}
                 placeholder="Note"
-                placeholderTextColor="#757575"
-                onChangeText={(e) => setContent(e)}
-                autoFocus={true}
-                multiline={true}
+                inputType="textarea"
+                handleChangeText={(e) => setContent(e)}
             />
         </SafeAreaView>
     )
