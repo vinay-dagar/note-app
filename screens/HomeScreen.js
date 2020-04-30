@@ -12,7 +12,9 @@ const HomeScreen = (props) => {
 
     const getNotes = async () => {
         try {
-            console.log('asdas')
+            const result = await $http.get('todo-list');
+
+            console.log(result)
         } catch (err) {
             console.log(err)
         }

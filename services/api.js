@@ -52,9 +52,9 @@ const services = {
     },
 
     async get(path) {
-        const results = await api.get(path);
+        const {data} = await api.get(path);
 
-        return Promise.resolve(results);
+        return Promise.resolve(data);
     },
 
     async getById(path, id) {
