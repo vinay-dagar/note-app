@@ -1,48 +1,75 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native';
 import FormFieldInput from '../components/FormFieldInput';
 
 const CreateNoteScreen = (props) => {
 
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState();
+    const [noteId, setNoteId] = useState();
+
+    useEffect(() => {
+        if (props.route && props.route.params) {
+            const id = props.route.params.noteId;
+            setNoteId(id)
+            getNoteDetail(id);
+        }
+    }, [props]);
 
     useEffect(() => {
         props.navigation.addListener('blur', () => {
-            storeNote()
+            storeNote(title, content)
         })
-    }, [props]);
+    }, [title, content])
 
-    const storeNote = async () => {
+    const storeNote = useCallback(async () => {
         try {
-            console.log({content, title})
             const data = {
-                content,
                 title,
-                image: ''
+                content,
+                // image: ''
             };
 
-            const result = await $http.rawPost('create-note', data);
-            console.log({result})
+            let result;
+            if(noteId) {
+                result = await $http.updateById('update-note', noteId, data)
+            } else {
+                result = await $http.rawPost('create-note', data);
+            }
+
         } catch (err) {
             console.log(err)
         }
-    }
+    }, [title, content]);
+
+    const getNoteDetail = async (id) => {
+        try {
+            const { data } = await $http.getById('todo-list', id);
+            if (data) {
+                setTitle(data.title);
+                setContent(data.content);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container} enabled behavior="position" collapsable={true}>
-            <FormFieldInput 
+            <FormFieldInput
                 inputType="text"
                 styles={styles.titleText}
                 placeholder="Title"
                 maxLength={20}
                 handleChangeText={(e) => setTitle(e)}
+                value={title}
             />
-            <FormFieldInput 
+            <FormFieldInput
                 styles={styles.noteText}
                 placeholder="Note"
                 inputType="textarea"
                 handleChangeText={(e) => setContent(e)}
+                value={content}
             />
         </SafeAreaView>
     )

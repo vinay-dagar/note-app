@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity,  } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity, FlatList  } from 'react-native';
 import CustomHeader from '../components/CustomHeader';
 import CustomFooter from '../components/CustomFooter';
 import  { Feather } from '@expo/vector-icons';
+import { Card, ListItem, Button, Icon } from 'react-native-elements';
 
 const HomeScreen = (props) => {
     const [notes, setNotes] = useState([]);
@@ -12,19 +13,43 @@ const HomeScreen = (props) => {
 
     const getNotes = async () => {
         try {
-            const result = await $http.get('todo-list');
-
-            console.log(result)
+            const {result} = await $http.get('todo-list');
+            if(result && result.length) {
+                setNotes(result);
+            }
         } catch (err) {
             console.log(err)
         }
+    };
+
+    const renderNotes = ({item}) => {
+        return (
+            <TouchableOpacity onPress={() => props.navigation.navigate('CreateNote', { noteId: item._id })}>
+                <Card style={styles.contentContainer} key={item.key} title={item.title}>
+                    <Text style={styles.content}> {item.content} </Text>
+                </Card>
+            </TouchableOpacity>
+        )
+    }
+
+    const dataNotFound = () => {
+        return (
+            <View>
+                <Text>No data found!</Text>
+            </View>
+        )
     }
 
     return (
         <View style={styles.container}>
             <CustomHeader {...props} />
             <StatusBar backgroundColor="#454545"  />
-            <Text>This is the Notes Home Screen</Text>
+            <FlatList 
+                data={notes}
+                keyExtractor={item => item.id}
+                renderItem={renderNotes}
+                ListEmptyComponent={dataNotFound}
+            />
 
             <TouchableOpacity style={styles.floatingButton} onPress={() => {props.navigation.navigate('CreateNote')}} >
                 <Feather name="plus" color="#fff" size={35} />
@@ -56,5 +81,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 100
+    },
+    contentContainer: {
+        width: DEVICE_WIDTH - 100,
+        justifyContent: 'center',
+        color: "#fff",
+        borderColor: "#636363",
+        backgroundColor: "#262626",
+        fontWeight: "700"
+    },
+    content: {
+        color: "#000",
+        fontWeight: "300",
     }
   });

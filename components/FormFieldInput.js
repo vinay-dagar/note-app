@@ -15,7 +15,8 @@ const TextField = (props) => {
             keyboardType="default"
             style={props.styles}
             maxLength={props.maxLength}
-            onChangeText={props.handleChangeText}
+            onChangeText={(e) => props.handleChangeText(e) }
+            value={props.value}
         />
     )
 };
@@ -46,6 +47,7 @@ const TextNumber = (props) => {
             maxLength={props.maxLength}
             onChangeText={props.handleChangeText}
             style={props.styles}
+            value={props.value}
         />
     )
 };
@@ -62,6 +64,7 @@ const TextArea = (props) => {
             scrollEnabled={true}
             numberOfLines={props.numberOfLines}
             style={props.styles}
+            value={props.value}
         />
     )
 };
