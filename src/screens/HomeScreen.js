@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity, FlatList  } from 'react-native';
-import CustomHeader from '../components/CustomHeader';
-import CustomFooter from '../components/CustomFooter';
+import CustomHeader from '../../components/CustomHeader';
+import CustomFooter from '../../components/CustomFooter';
 import  { Feather } from '@expo/vector-icons';
 import { Card, ListItem, Button, Icon } from 'react-native-elements';
 
 const HomeScreen = (props) => {
     const [notes, setNotes] = useState([]);
+
     useEffect(() => {
         getNotes()
     }, []);
@@ -21,6 +22,14 @@ const HomeScreen = (props) => {
             console.log(err)
         }
     };
+
+    const handleCaptureImage = () => {
+        props.navigation.navigate('CameraView');
+    }
+
+    const handleChooseFromGallery = () => {
+        console.log('Choose from gallary')
+    }
 
     const renderNotes = ({item}) => {
         return (
@@ -45,6 +54,7 @@ const HomeScreen = (props) => {
             <CustomHeader {...props} />
             <StatusBar backgroundColor="#454545"  />
             <FlatList 
+                style={styles.contentList}
                 data={notes}
                 keyExtractor={item => item.id}
                 renderItem={renderNotes}
@@ -54,7 +64,11 @@ const HomeScreen = (props) => {
             <TouchableOpacity style={styles.floatingButton} onPress={() => {props.navigation.navigate('CreateNote')}} >
                 <Feather name="plus" color="#fff" size={35} />
             </TouchableOpacity>
-            <CustomFooter {...props} />
+            <CustomFooter 
+                handleCaptureImage={handleCaptureImage} 
+                handleChooseFromGallery={handleChooseFromGallery} 
+                {...props} 
+            />
         </View>
     )
 };
@@ -88,10 +102,14 @@ const styles = StyleSheet.create({
         color: "#fff",
         borderColor: "#636363",
         backgroundColor: "#262626",
-        fontWeight: "700"
+        fontWeight: "700",
+        borderRadius: 20
     },
     content: {
         color: "#000",
         fontWeight: "300",
+    },
+    contentList: {
+        marginBottom: 80,
     }
   });

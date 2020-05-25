@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native';
-import FormFieldInput from '../components/FormFieldInput';
+import FormFieldInput from '../../components/FormFieldInput';
 
 const CreateNoteScreen = (props) => {
 
@@ -38,6 +38,7 @@ const CreateNoteScreen = (props) => {
             }
 
         } catch (err) {
+            // Alert.alert('Error', err.message, [{text: 'Ok!'}])
             console.log(err)
         }
     }, [title, content]);

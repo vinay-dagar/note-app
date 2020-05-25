@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Modal } from 'react-native'
 import { AntDesign, Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -7,8 +7,23 @@ const CustomFooter = (props) => {
     const [showCameraModal, setShowCameraModal] = useState(false);
     const [showAudioModal, setShowAudioModal] = useState(false);
 
+    const handleCloseModal = () => {
+        console.log('asddffsad')
+    };
+    const handleCaptureImage = () => {
+        setShowCameraModal(false)
+        props.handleCaptureImage()
+    };
+
+    const handleChooseFromGallery = () => {
+        setShowAudioModal(false)
+        props.handleChooseFromGallery()
+    }
+
+
     return (
         <View style={styles.footerLayout}>
+            {/* LIST VIEW */}
             <View style={styles.iconContainer}>
                 <TouchableOpacity style={styles.iconButton} onPress={() => { props.navigation.navigate('CreateList') }}>
                     <AntDesign name="checksquareo" color="#fff" size={25} />
@@ -23,6 +38,7 @@ const CustomFooter = (props) => {
                     <MaterialCommunityIcons name="image-album" color="#fff" size={25} />
                 </TouchableOpacity>
             </View>
+            {/* CAMERA MODAL */}
             <Modal
                 visible={showCameraModal}
                 onDismiss={() => { setShowCameraModal(false) }}
@@ -32,16 +48,17 @@ const CustomFooter = (props) => {
             >
                 <View style={styles.modalContainer}>
                     <Text style={styles.modleText}>Add Image</Text>
-                    <TouchableOpacity style={styles.modalButtons}>
+                    <TouchableOpacity style={styles.modalButtons} onPress={handleCaptureImage}>
                         <Feather size={30} color="#fff" name="camera" />
                         <Text style={styles.modalButtonText}>Take Photo</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.modalButtons}>
+                    <TouchableOpacity style={styles.modalButtons} onPress={handleChooseFromGallery}>
                         <Feather size={30} color="#fff" name="image" />
                         <Text style={styles.modalButtonText}>Choose Image</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>
+            {/* Audio Modal */}
             <Modal
                 visible={showAudioModal}
                 onDismiss={() => { setShowAudioModal(false) }}
@@ -52,7 +69,7 @@ const CustomFooter = (props) => {
                 <View style={styles.modalContainer}>
                     <Text style={styles.modleText}>Audio Not available!</Text>
                     <Text>
-                        Currently the record audio functionallity is not available. 
+                        Currently the record audio functionallity is not available.
                     </Text>
                 </View>
             </Modal>

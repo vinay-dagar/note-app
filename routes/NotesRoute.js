@@ -4,11 +4,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 // Screens
-import HomeScreen from '../screens/HomeScreen';
-import CreateNote from '../screens/CreateNoteScreen';
-import CreateList from '../screens/CreateListScreen';
-import DeletedNotes from '../screens/DeletedNotesScreen';
-import Settings from '../screens/SettingsScreen';
+import HomeScreen from '../src/screens/HomeScreen';
+import CreateNote from '../src/screens/CreateNoteScreen';
+import CreateList from '../src/screens/CreateListScreen';
+import DeletedNotes from '../src/screens/DeletedNotesScreen';
+import Settings from '../src/screens/SettingsScreen';
+import CreateTile from '../src/screens/CreateTileScreen';
+
+// View
+import CameraView from '../src/views/CameraView';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -38,6 +42,8 @@ const Routes = () => {
                 <Stack.Screen name='Home' component={DrawerNavigator} />
                 <Stack.Screen name='CreateNote' component={CreateNote} />
                 <Stack.Screen name='CreateList' component={CreateList} />
+                <Stack.Screen name='CreateTile' component={CreateTile} />
+                <Stack.Screen name='CameraView' component={CameraView} />
             </Stack.Navigator>
         </NavigationContainer>
     )
