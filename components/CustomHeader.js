@@ -1,11 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import  { Ionicons, AntDesign } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
-const CustomHeader = () => {
+const CustomHeader = ({navigation}) => {
     return (
         <View style={styles.headerContainer}>
-            <Ionicons name="ios-menu" size={30} color="#fff" />
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Ionicons name="ios-menu" size={30} color="#fff" />
+            </TouchableOpacity>
             <Text style={styles.searchText}> Search your Notes </Text>
             <AntDesign name="smile-circle" size={28} color="#fff" />
         </View>
@@ -16,7 +19,7 @@ export default CustomHeader
 
 const styles = StyleSheet.create({
     headerContainer: {
-        margin: 10,
+        marginTop: 7,
         padding: 10,
         borderWidth: 1,
         backgroundColor: '#3b3b3b',
@@ -24,7 +27,8 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'space-between',
         flexDirection: "row",
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '95%'
     },
     searchText: {
         fontSize: 25,

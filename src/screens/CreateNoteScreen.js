@@ -1,57 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Dimensions, StyleSheet, TextInput, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useCallback, } from 'react'
+import { Dimensions, StyleSheet, SafeAreaView, TouchableOpacity, Text, View } from 'react-native';
 import FormFieldInput from '../../components/FormFieldInput';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CreateNoteScreen = (props) => {
-
     const [title, setTitle] = useState('');
     const [content, setContent] = useState();
     const [noteId, setNoteId] = useState();
 
     useEffect(() => {
-        if (props.route && props.route.params) {
-            const id = props.route.params.noteId;
+        if (props?.route?.params) {
+            const { title, id, content } = props.route.params;
             setNoteId(id)
-            getNoteDetail(id);
+            setTitle(title)
+            setContent(content)
         }
-    }, [props]);
+    }, [props.route.params]);
 
-    useEffect(() => {
-        props.navigation.addListener('blur', () => {
-            storeNote(title, content)
-        })
-    }, [title, content])
-
-    const storeNote = useCallback(async () => {
+    const storeNote = async () => {
         try {
-            const data = {
-                title,
-                content,
-                // image: ''
-            };
-
             let result;
-            if(noteId) {
+            const data = { title, content }
+            if (noteId) {
                 result = await $http.updateById('update-note', noteId, data)
             } else {
                 result = await $http.rawPost('create-note', data);
             }
 
+            props.navigation.navigate('Home')
         } catch (err) {
-            // Alert.alert('Error', err.message, [{text: 'Ok!'}])
             console.log(err)
-        }
-    }, [title, content]);
-
-    const getNoteDetail = async (id) => {
-        try {
-            const { data } = await $http.getById('todo-list', id);
-            if (data) {
-                setTitle(data.title);
-                setContent(data.content);
-            }
-        } catch (err) {
-            console.log(err);
         }
     };
 
@@ -72,6 +50,14 @@ const CreateNoteScreen = (props) => {
                 handleChangeText={(e) => setContent(e)}
                 value={content}
             />
+            <View style={styles.saveButtonContainer}>
+                <TouchableOpacity onPress={storeNote}>
+                    <Text style={{ color: '#fff' }}>SAVE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+                    <Text style={{ color: '#fff' }}>CANCEL</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
@@ -101,5 +87,13 @@ const styles = StyleSheet.create({
         color: "#fff",
         padding: 10,
         borderColor: '#fff',
+        height: DEVICE_Height - 120,
+        textAlignVertical: 'top'
+    },
+    saveButtonContainer: {
+        margin: 10,
+        alignContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 });

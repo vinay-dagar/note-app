@@ -42,6 +42,7 @@ const CameraView = (props) => {
                 // allowsEditing: true,
                 aspect: [16, 9],
                 quality: 0.5,
+                base64: true
             })
 
             if (image.cancelled) {
