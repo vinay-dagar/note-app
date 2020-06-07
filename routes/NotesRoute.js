@@ -10,9 +10,11 @@ import CreateList from '../src/screens/CreateListScreen';
 import DeletedNotes from '../src/screens/DeletedNotesScreen';
 import Settings from '../src/screens/SettingsScreen';
 import CreateTile from '../src/screens/CreateTileScreen';
+import SearchScreen from '../src/screens/SearchScreen';
 
 // View
 import CameraView from '../src/views/CameraView';
+import GallaryView from '../src/views/GallaryView';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -43,7 +45,9 @@ const Routes = () => {
                 <Stack.Screen name='CreateNote' component={CreateNote} />
                 <Stack.Screen name='CreateList' component={CreateList} />
                 <Stack.Screen name='CreateTile' component={CreateTile} />
+                <Stack.Screen name='SearchScreen' component={SearchScreen} />
                 <Stack.Screen name='CameraView' component={CameraView} />
+                <Stack.Screen name='GallaryView' component={GallaryView} />
             </Stack.Navigator>
         </NavigationContainer>
     )

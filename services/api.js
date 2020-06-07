@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { stringify } from 'qs';
 
 function createAxios() {
     const axios = Axios.create();
@@ -26,7 +27,7 @@ function createAxios() {
             // if (error && error.response && error.response.status === 401) {
             //     state.dispatch('auth/logout');
             // }
-            if(error && error.response){
+            if (error && error.response) {
                 return Promise.reject(error.response.data);
             }
             return Promise.reject(error);
@@ -51,8 +52,9 @@ const services = {
         return Promise.resolve(results);
     },
 
-    async get(path) {
-        const {data} = await api.get(path);
+    async get(path, query = null) {
+
+        const { data } = await api.get(`${path}?${stringify(query)}`);
 
         return Promise.resolve(data);
     },

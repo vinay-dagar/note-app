@@ -31,7 +31,7 @@ const HomeScreen = (props) => {
     }
 
     const handleChooseFromGallery = () => {
-        console.log('Choose from gallary')
+        props.navigation.navigate('GallaryView');
     }
 
     const setNoteData = (item = null) => {

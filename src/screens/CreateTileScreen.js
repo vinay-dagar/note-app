@@ -3,14 +3,11 @@ import Axios from 'axios';
 import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import FormFieldInput from '../../components/FormFieldInput';
 
-
 const CreateTileScreen = (props) => {
-    const [hasPermission, setHasPermission] = useState(null);
     const [title, setTitle] = useState('');
     const [caption, setCaption] = useState('');
     const [imageObject, setImageObject] = useState();
     const [imageUrl, setImageUrl] = useState();
-
 
     useEffect(() => {
         if (props.route.params) {

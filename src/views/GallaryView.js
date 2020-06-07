@@ -3,7 +3,7 @@ import { Text, View, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-const CameraView = (props) => {
+const GallaryView = (props) => {
     const [hasPermission, setHasPermission] = useState(null);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ const CameraView = (props) => {
 
     useEffect(() => {
         if (hasPermission) {
-            captureImage();
+            openImage();
         }
     }, [hasPermission])
 
@@ -21,7 +21,7 @@ const CameraView = (props) => {
         if (result.status !== 'granted') {
             Alert.alert(
                 'Insuficient Permission',
-                'Permission denined to access the camera!',
+                'Permission denined to access the gallary!',
                 [{ text: 'Ok!' }]
             );
         }
@@ -33,17 +33,17 @@ const CameraView = (props) => {
     }
 
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>No access to gallary</Text>;
     }
 
-    const captureImage = async () => {
+    const openImage = async () => {
         try {
-            const image = await ImagePicker.launchCameraAsync({
-                // allowsEditing: true,
-                aspect: [16, 9],
-                quality: 0.5,
-                base64: true
-            })
+            const image = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
 
             if (image.cancelled) {
                 props.navigation.navigate('Home')
@@ -60,4 +60,4 @@ const CameraView = (props) => {
     )
 }
 
-export default CameraView;
+export default GallaryView;

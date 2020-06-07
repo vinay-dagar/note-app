@@ -10,13 +10,14 @@ const TextField = (props) => {
     return (
         <TextInput
             placeholder={props.placeholder}
-            autoCorrect={true}
+            autoCorrect={props.autoCorrect}
             placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
             keyboardType="default"
             style={props.styles}
             maxLength={props.maxLength}
             onChangeText={(e) => props.handleChangeText(e) }
             value={props.value}
+            autoFocus={props.autoFocus}
         />
     )
 };

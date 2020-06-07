@@ -7,19 +7,15 @@ const CustomFooter = (props) => {
     const [showCameraModal, setShowCameraModal] = useState(false);
     const [showAudioModal, setShowAudioModal] = useState(false);
 
-    const handleCloseModal = () => {
-        console.log('asddffsad')
-    };
     const handleCaptureImage = () => {
         setShowCameraModal(false)
         props.handleCaptureImage()
     };
 
     const handleChooseFromGallery = () => {
-        setShowAudioModal(false)
+        setShowCameraModal(false)
         props.handleChooseFromGallery()
     }
-
 
     return (
         <View style={styles.footerLayout}>
