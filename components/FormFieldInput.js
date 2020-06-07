@@ -11,7 +11,7 @@ const TextField = (props) => {
         <TextInput
             placeholder={props.placeholder}
             autoCorrect={props.autoCorrect}
-            placeholderTextColor={PLACEHOLDER_TEXT_COLOR}
+            placeholderTextColor={props.placeholderTextColor || PLACEHOLDER_TEXT_COLOR}
             keyboardType="default"
             style={props.styles}
             maxLength={props.maxLength}

@@ -54,7 +54,7 @@ const CreateNoteScreen = (props) => {
                 <TouchableOpacity onPress={storeNote}>
                     <Text style={{ color: '#fff' }}>SAVE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+                <TouchableOpacity onPress={() => props.navigation.pop()}>
                     <Text style={{ color: '#fff' }}>CANCEL</Text>
                 </TouchableOpacity>
             </View>

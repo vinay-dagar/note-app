@@ -9,7 +9,13 @@ const CustomHeader = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                 <Ionicons name="ios-menu" size={30} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('SearchScreen')} style={styles.searchText}> Search your Notes </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => navigation.push('SearchScreen')}
+            >
+                <Text style={styles.searchText}>
+                    Search your Notes
+                </Text>
+            </TouchableOpacity>
             <AntDesign name="smile-circle" size={28} color="#fff" />
         </View>
     )

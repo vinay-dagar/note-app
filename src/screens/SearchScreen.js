@@ -1,21 +1,40 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, FlatList } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, FlatList, Image } from 'react-native'
 import FormFieldInput from '../../components/FormFieldInput';
 import { AntDesign } from '@expo/vector-icons';
 import { debounce } from 'lodash';
 
 const SearchScreen = (props) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [notes, setNotes] = useState([]);
 
     const getNotes =  debounce(async (search) => {
         try {
+            setIsLoading(true)
             const query = { search }
-
+            
             const { result } = await $http.get('search-note', query)
+            setIsLoading(false)
+            setNotes(result)
         } catch (err) {
+            setIsLoading(false)
             console.log(err)
         }
-    }, 200)
+    }, 700)
+
+    const setNoteData = (item = null) => {
+        let data;
+        if(item) {
+            data = {
+                title: item.title,
+                content: item.content,
+                image: item.image ? item.image : '',
+                id: item._id
+            }
+        }
+
+        item.image ? props.navigation.navigate('CreateTile', data) : props.navigation.navigate('CreateNote', data)
+    }
 
     const renderNotes = ({ item }) => {
         return (
@@ -42,13 +61,14 @@ const SearchScreen = (props) => {
     return (
         <View style={styles.searchContainer}>
             <View style={styles.headerContainer}>
-                <TouchableOpacity onPress={props.navigation.pull()}>
-                    <AntDesign name="arrowleft" size={24} color="black" />
+                <TouchableOpacity style={styles.backButton} onPress={() => props.navigation.pop()}>
+                    <AntDesign name="arrowleft" size={30} color="#fff" />
                 </TouchableOpacity>
                 <FormFieldInput
                     inputType="text"
                     placeholder="Search your notes"
-                    handleChangeText={e => setSearch(e)}
+                    handleChangeText={e => getNotes(e)}
+                    placeholderTextColor="#fff"
                     styles={styles.searchArea}
                     autoFocus={true}
                 />
@@ -61,7 +81,6 @@ const SearchScreen = (props) => {
                 ListEmptyComponent={dataNotFound}
                 refreshing={isLoading}
                 initialNumToRender={10}
-                onRefresh={() => getNotes()}
                 getItemLayout={(data, index) => {
                     return { length: 10, offset: 10 * index, index }
                 }}
@@ -78,22 +97,27 @@ const styles = StyleSheet.create({
     searchContainer: {
         flex: 1,
         alignItems: "center",
-        backgroundColor: "#1c1c1c",
+        backgroundColor: "#242222",
     },
     headerContainer: {
         flexDirection: "row",
-        justifyContent: "space-between",
         margin: 10,
         borderWidth: 1.5,
         borderRadius: 15,
-        borderColor: '#b7bdb3',
-        height: 120,
+        borderColor: '#696969',
+        height: 60,
         width: DEVICE_WIDTH
+    },
+    backButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 5
     },
     searchArea: {
         fontSize: 17,
-        fontFamily: 'Arial',
-        fontWeight: "400",
+        fontWeight: "100",
+        color: "#fff",
+        marginLeft: 15
     },
     itemContainer: {
         width: DEVICE_WIDTH - 30,
@@ -101,7 +125,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderColor: "#636363",
         borderRadius: 20,
-        backgroundColor: "#1c1c1c",
+        backgroundColor: "#adaaaa",
         marginVertical: 4,
     },
     contentContainer: {
@@ -117,12 +141,12 @@ const styles = StyleSheet.create({
     },
     title: {
         padding: 4,
-        color: "#fff",
+        color: "#050505",
         fontSize: 20,
         fontWeight: "800",
     },
     content: {
-        color: "#fff",
+        color: "#292929",
         fontWeight: "400",
     },
     image: {
