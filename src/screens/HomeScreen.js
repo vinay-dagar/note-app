@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, Dimensions, TouchableOpacity, FlatList, Image, Animated } from 'react-native';
 import CustomHeader from '../../components/CustomHeader';
 import CustomFooter from '../../components/CustomFooter';
+import SwipeableComponent from '../../components/SwipeableComponent';
 import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 const HomeScreen = (props) => {
     const [notes, setNotes] = useState([]);
@@ -15,11 +17,12 @@ const HomeScreen = (props) => {
     const getNotes = async () => {
         try {
             setIsLoading(true)
-            const { result } = await $http.get('todo-list');
+
+            const { result } = await $http.get('notes-list');
             if (result && result.length) {
                 setNotes(result);
-                setIsLoading(false)
             }
+            setIsLoading(false)
         } catch (err) {
             setIsLoading(false)
             console.log(err)
@@ -34,9 +37,9 @@ const HomeScreen = (props) => {
         props.navigation.navigate('GallaryView');
     }
 
-    const setNoteData = (item = null) => {
+    const setNoteDataAndRedirect = (item = null) => {
         let data;
-        if(item) {
+        if (item) {
             data = {
                 title: item.title,
                 content: item.content,
@@ -48,17 +51,73 @@ const HomeScreen = (props) => {
         item.image ? props.navigation.navigate('CreateTile', data) : props.navigation.navigate('CreateNote', data)
     }
 
-    const renderNotes = ({ item }) => {
+    const deleteNote = async (id) => {
+        try {
+            const filteredNotes = notes.filter(n => n._id !== id);
+            setNotes(filteredNotes)
+            await $http.rawPut('delete-note', id)
+            getNotes()
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const leftSwipeAction = (progess, dragX) => {
+        const scale = dragX.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+            extrapolate: 'clamp'
+        });
+
         return (
-            <TouchableOpacity style={styles.itemContainer} key={item._id} onPress={() => setNoteData(item)}>
-                <View style={styles.contentContainer} key={item._id}>
-                    {item.image ? <Image style={styles.image} source={{ uri: item.image }} /> : null}
-                    <View style={styles.textContainer}>
-                        <Text style={styles.title}> {item.title} </Text>
-                        <Text style={styles.content}> {item.content} </Text>
+            <View style={styles.swipeLeftContainer}>
+                <Animated.View style={[styles.swipeIconContainer, { transform: [{ scale }] }]}>
+                    <AntDesign size={30} name="delete" color="#fff" />
+                </Animated.View>
+            </View>
+        )
+    }
+
+    const rightSwipeAction = (progess, dragX) => {
+        const scale = dragX.interpolate({
+            inputRange: [-100, 0],
+            outputRange: [1, 0],
+            extrapolate: 'clamp'
+        });
+
+        return (
+            <View style={styles.swipeRightContainer}>
+                <Animated.View style={[styles.swipeIconContainer, { transform: [{ scale }] }]}>
+                    <AntDesign size={30} name="delete" color="#fff" />
+                </Animated.View>
+            </View>
+        )
+    }
+
+    const swipeSettings = {
+        autoClose: true,
+        handleSwipeOpen: (data) => deleteNote(data),
+        renderLeftActions: leftSwipeAction,
+        renderRightActions: rightSwipeAction,
+    }
+
+    const renderNotes = ({ item, index }) => {
+        return (
+            <SwipeableComponent
+                {...swipeSettings}
+                data={item._id}
+                index={index}
+            >
+                <TouchableOpacity style={styles.itemContainer} key={item._id} onPress={() => setNoteDataAndRedirect(item)}>
+                    <View style={styles.contentContainer} key={item._id}>
+                        {item.image ? <Image style={styles.image} source={{ uri: item.image }} /> : null}
+                        <View style={styles.textContainer}>
+                            <Text style={styles.title}> {item.title} </Text>
+                            <Text style={styles.content}> {item.content} </Text>
+                        </View>
                     </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </SwipeableComponent>
         )
     }
 
@@ -169,5 +228,24 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: "200",
         color: "#1c1c1c"
-    }
+    },
+    swipeLeftContainer: {
+        padding: 10,
+        justifyContent: 'center',
+        backgroundColor: '#ffcbc7',
+        width: '100%',
+        borderRadius: 15,
+        marginVertical: 5,
+    },
+    swipeIconContainer: {
+        marginLeft: 20
+    },
+    swipeRightContainer: {
+        alignItems: 'flex-end',
+        padding: 10,
+        justifyContent: 'center',
+        backgroundColor: '#ffcbc7',
+        width: '100%',
+        borderRadius: 15,
+    },
 });

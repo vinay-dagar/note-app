@@ -46,6 +46,12 @@ const services = {
         return Promise.resolve(results);
     },
 
+    async rawPut(path, id, data) {
+        const results = await api.put(`${path}/${id}`, data);
+
+        return Promise.resolve(results);
+    },
+
     async updateById(path, id, data) {
         const results = await api.put(`${path}/${id}`, data);
 
